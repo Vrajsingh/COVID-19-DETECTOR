@@ -20,29 +20,43 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+# Steps :
+# Pre Processed Input => Mobile Net (not Convolution [Feature Maps]) => Max Pooling => Fully Connected => Output
+
+# Mobile Net is faster than Convolution but the relatively less accurate than Convolution.
+
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size
-INIT_LR = 1e-4
-EPOCHS = 20
-BS = 32
+INIT_LR = 1e-4 # the lesser the value, the more accurate prediction will be...
 
+EPOCHS = 20 # One Epoch is when an ENTIRE dataset is passed forward and backward 
+# through the neural network only ONCE. Since one epoch is too big to feed to the computer 
+# at once we divide it in several smaller batches.
+
+BS = 32 # batch size
+
+# path to dataset folder
 DIRECTORY = r"D:\MASK DETECTION\Face-Mask-Detection-master\dataset"
+
+# values represent folder name inside dataset folder containing images in which we will going to iterate each image using loop
 CATEGORIES = ["with_mask", "without_mask"]
 
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
 
+# created two empty list. Append all the image in Data list we will store images while 
+# in labels we will store the category name of respective image present in Data list. 
 data = []
 labels = []
 
 for category in CATEGORIES:
-    path = os.path.join(DIRECTORY, category)
+    path = os.path.join(DIRECTORY, category) # path to category
     for img in os.listdir(path):
-    	img_path = os.path.join(path, img)
-    	image = load_img(img_path, target_size=(224, 224))
-    	image = img_to_array(image)
-    	image = preprocess_input(image)
+    	img_path = os.path.join(path, img) # path to images
+    	image = load_img(img_path, target_size=(224, 224)) # (224 * 224 pixels) # Loading the image
+    	image = img_to_array(image) # coverting images to array
+    	image = preprocess_input(image) # We have to use it if we are using MobileNet instead of Convulation Process
 
     	data.append(image)
     	labels.append(category)
